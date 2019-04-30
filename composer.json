@@ -1,0 +1,25 @@
+{
+    "name": "pie/tx-map-api",
+    "description": "腾讯sdk api",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "阿派",
+            "email": "huangwenpai@xiaoyouzi.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload" :{
+        "psr-4" : {
+            "src\\sdk\\" : "src/sdk",
+            "src\\lib\\" : "src/lib"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "test\\": "test"
+        }
+    }
+}
