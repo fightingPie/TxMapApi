@@ -102,6 +102,33 @@ class TxMapApi
             return [];
         }
     }
+
+
+    /**
+     * 参考 http://lbs.qq.com/webservice_v1/guide-gcoder.html
+     * 根据地址显示附近地点列表
+     * 逆地址解析(坐标位置描述)
+     * @param type $param
+     * @return type
+     */
+    public static function getLocation($param = [])
+    {
+        $data = self::apiGet(TX_MAP_API_GEOCODER, $param);
+        if ($data) {
+            try {
+                if (!empty($data['result']['location'])) {
+                    return $data['result']['location'];
+                } else {
+                    return [];
+                }
+            } catch (Exception $e) {
+                return [];
+            }
+        } else {
+            return [];
+        }
+    }
+
     /**
      * 参考 http://lbs.qq.com/webservice_v1/guide-distance.html
      * 计算两地行驶距离
