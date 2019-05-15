@@ -7,7 +7,12 @@
  */
 
 require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
+
 use src\sdk\TxMapApi;
+use src\sdk\Config;
+
+$config = new Config('请自行去申请');
+$api = new TxMapApi($config);
 
 ////关键词搜索
 //$param = [
@@ -21,8 +26,8 @@ use src\sdk\TxMapApi;
 $param = [
     'address' => '厦门湖里万达',
 ];
-$data2=TxMapApi::getLocation($param);
-var_dump($data2['lng'],$data2['lat']);
+$data2 = $api->getLocation($param);
+var_dump($data2['lng'], $data2['lat']);
 
 
 //距离计算
@@ -31,7 +36,7 @@ $param = [
     'to' => '24.48938,118.178802;24.492321,118.128212;24.579805,118.095085;24.5118,118.14577',
     'mode' => 'walking',
 ];
-$data3=TxMapApi::calcDistance($param);
+$data3 = $api->calcDistance($param);
 
 
 //路线规划服务
@@ -40,7 +45,7 @@ $param = [
     'to' => '24.5041755178,118.1777858734',
     'mode' => 'walking',
 ];
-$data4 = TxMapApi::routePlanning($param);
+$data4 = $api->routePlanning($param);
 var_dump($data4);
 
 

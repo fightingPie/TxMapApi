@@ -11,38 +11,47 @@ namespace src\sdk;
 use src\lib\HttpCurl;
 use Exception;
 
-define('TX_MAP_API', 'http://apis.map.qq.com/ws/');
-define('TX_MAP_API_KEY', 'QR7BZ-X2S3X-FZV4A-7SQUB-ORE57-RJFEF');
-define('TX_MAP_API_GEOCODER', TX_MAP_API . 'geocoder/v1/'); //逆地址解析 http://lbs.qq.com/webservice_v1/guide-gcoder.html
-define('TX_MAP_API_KEYWORD', TX_MAP_API . 'place/v1/suggestion'); //关键词输入提示 http://lbs.qq.com/webservice_v1/guide-suggestion.html
-define('TX_MAP_API_DISTANCE', TX_MAP_API . 'distance/v1/'); //距离计算 http://lbs.qq.com/webservice_v1/guide-distance.html
-define('TX_MAP_API_DIRECTION', TX_MAP_API . 'direction/v1/'); //路线规划 http://lbs.qq.com/webservice_v1/guide-road.html
 
 class TxMapApi
 {
+
+    /**
+     * @var Config
+     */
+    private $configuration;
+
+    /**
+     * @param Config $config
+     */
+    public function __construct(Config $config)
+    {
+        $this->configuration = $config;
+    }
+
     /**
      * 合并查询参数
      * @param array $data
      * @return array
      */
-    private static function mergeData($data)
+    private function mergeData($data)
     {
         $opt = [
-            'key' => TX_MAP_API_KEY,
+            'key' => $this->configuration->getApiKey(),
         ];
         $opt = array_merge($opt, $data);
         return $opt;
     }
+
     /**
      *
      * @param type $url
      * @param type $param
      * @return boolean
      */
-    private static function apiGet($url, $param)
+    private function apiGet($url, $param)
     {
-        $param = self::mergeData($param);
-        $result = HttpCurl::get($url, $param, 30);
+        $param = $this->mergeData($param);
+        $result = HttpCurl::get($this->configuration->getApi() . $url, $param, 30);
         try {
             $res = json_decode($result, true);
         } catch (Exception $e) {
@@ -54,16 +63,17 @@ class TxMapApi
             return false;
         }
     }
+
     /**
      * 参考 http://lbs.qq.com/webservice_v1/guide-suggestion.html
      * 根据关键词搜索地点
      * 关键词输入提示
-     * @param type $param     keyword:关键词   region:城市范围   region_fix:0当前城市无结果自动扩散到全国 1固定在当前城市   policy:检索策略
+     * @param type $param keyword:关键词   region:城市范围   region_fix:0当前城市无结果自动扩散到全国 1固定在当前城市   policy:检索策略
      * @return type
      */
-    public static function getPlaceByKeyword($param = [])
+    public function getPlaceByKeyword($param = [])
     {
-        $data = self::apiGet(TX_MAP_API_KEYWORD, $param);
+        $data = $this->apiGet($this->configuration->getApiKeyword(), $param);
         if ($data) {
             try {
                 if (!empty($data['data'])) {
@@ -78,6 +88,7 @@ class TxMapApi
             return [];
         }
     }
+
     /**
      * 参考 http://lbs.qq.com/webservice_v1/guide-gcoder.html
      * 根据地址显示附近地点列表
@@ -85,9 +96,9 @@ class TxMapApi
      * @param type $param
      * @return type
      */
-    public static function getNearPlace($param = [])
+    public function getNearPlace($param = [])
     {
-        $data = self::apiGet(TX_MAP_API_GEOCODER, $param);
+        $data = self::apiGet($this->configuration->getApiGeocoder(), $param);
         if ($data) {
             try {
                 if (!empty($data['result']['poi_count'])) {
@@ -111,9 +122,9 @@ class TxMapApi
      * @param type $param
      * @return type
      */
-    public static function getLocation($param = [])
+    public function getLocation($param = [])
     {
-        $data = self::apiGet(TX_MAP_API_GEOCODER, $param);
+        $data = self::apiGet($this->configuration->getApiGeocoder(), $param);
         if ($data) {
             try {
                 if (!empty($data['result']['location'])) {
@@ -133,18 +144,19 @@ class TxMapApi
      * 参考 http://lbs.qq.com/webservice_v1/guide-distance.html
      * 计算两地行驶距离
      * 距离计算
-     * @param array $param    mode:计算方式：driving[驾车]、walking[步行]   from:起点坐标，格式：lat,lng;lat,lng...   to:终点坐标，格式：lat,lng;lat,lng...
+     * @param array $param mode:计算方式：driving[驾车]、walking[步行]   from:起点坐标，格式：lat,lng;lat,lng...   to:终点坐标，格式：lat,lng;lat,lng...
      * @return array
      */
-    public static function calcDistance($param = [], $flag = false)
+    public function calcDistance($param = [], $flag = false)
     {
-        $res = self::apiGet(TX_MAP_API_DISTANCE, $param);
+        $res = self::apiGet($this->configuration->getApiDistance(), $param);
         if ($res) {
             return $res['result']['elements'];
-        }else{
+        } else {
             return [];
         }
     }
+
     /**
      * 参考 http://lbs.qq.com/webservice_v1/guide-road.html
      * 路线规划返回规划路线列表
@@ -158,14 +170,14 @@ class TxMapApi
      * 更多参数见参考
      * @return array
      */
-    public static function routePlanning($param = [])
+    public function routePlanning($param = [])
     {
         if (empty($param['mode'])) {
             return false;
         }
         $modes = ['driving', 'walking', 'bicycling', 'transit'];
         if (in_array($param['mode'], $modes)) {
-            $apiurl = TX_MAP_API_DIRECTION . $param['mode'] . '/';
+            $apiurl = $this->configuration->getApiDirection() . $param['mode'] . '/';
         } else {
             return false;
         }
@@ -180,6 +192,7 @@ class TxMapApi
         }
         return false;
     }
+
     /**
      * polyline 转坐标点
      * @param string $polyline
@@ -191,7 +204,7 @@ class TxMapApi
         $len = count($polyline);
         if ($len > 2) {
             for ($i = 2; $i < $len; $i++) {
-                $polyline[$i]=$polyline[$i-2]+$polyline[$i]/1000000;
+                $polyline[$i] = $polyline[$i - 2] + $polyline[$i] / 1000000;
             }
         }
         //根据需要转换格式
