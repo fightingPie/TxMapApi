@@ -142,7 +142,7 @@ class TxMapApi
 
     /**
      * 参考 http://lbs.qq.com/webservice_v1/guide-distance.html
-     * 计算两地行驶距离
+     * 计算两地行驶距离 一对多
      * 距离计算
      * @param array $param mode:计算方式：driving[驾车]、walking[步行]   from:起点坐标，格式：lat,lng;lat,lng...   to:终点坐标，格式：lat,lng;lat,lng...
      * @return array
@@ -152,6 +152,23 @@ class TxMapApi
         $res = self::apiGet($this->configuration->getApiDistance(), $param);
         if ($res) {
             return $res['result']['elements'];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * 参考 https://lbs.qq.com/webservice_v1/guide-distancematrix.html
+     * 计算两地行驶距离矩阵 多对多
+     * 距离计算
+     * @param array $param mode:计算方式：driving[驾车]、walking[步行]   from:起点坐标，格式：lat,lng;lat,lng...   to:终点坐标，格式：lat,lng;lat,lng...
+     * @return array
+     */
+    public function distanceMatrix($param = [], $flag = false)
+    {
+        $res = self::apiGet($this->configuration->getApiDistance().'matrix', $param);
+        if ($res) {
+            return $res['result']['rows'];
         } else {
             return [];
         }

@@ -12,7 +12,7 @@ namespace src\sdk;
 class Config
 {
     private $api_key;
-    private $api = 'http://apis.map.qq.com/ws/';
+    private $api = 'https://apis.map.qq.com/ws/';
     private $api_api_geocoder = 'geocoder/v1/';
     private $api_api_keyword = 'place/v1/suggestion';
     private $api_api_distance = 'distance/v1/';
