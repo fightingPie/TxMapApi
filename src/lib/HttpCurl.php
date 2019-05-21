@@ -6,7 +6,7 @@
  * Time: 下午2:24
  */
 
-namespace src\lib;
+namespace apie\tencentMapApi\lib;
 
 
 class HttpCurl

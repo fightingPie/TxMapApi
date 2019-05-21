@@ -6,9 +6,9 @@
  * Time: 下午2:22
  */
 
-namespace src\sdk;
+namespace apie\tencentMapApi\sdk;
 
-use src\lib\HttpCurl;
+use apie\tencentMapApi\lib\HttpCurl;
 use Exception;
 
 

@@ -6,7 +6,7 @@
  * Time: 下午1:40
  */
 
-namespace src\sdk;
+namespace apie\tencentMapApi\sdk;
 
 
 class MapConfig

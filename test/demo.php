@@ -8,7 +8,7 @@
 
 require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
 
-use src\sdk\TxMapApi;
+use apie\tencentMapApi\sdk\TxMapApi;
 
 $api = new TxMapApi('QR7BZ-X2S3X-FZV4A-7SQUB-ORE57-RJFEF');
 
