@@ -13,8 +13,8 @@
     "require": {},
     "autoload" :{
         "psr-4" : {
-            "apie\\tencentMapApi\\sdk\\" : "src/sdk",
-            "apie\\tencentMapApi\\lib\\" : "src/lib"
+            "apie\\tencentMapApi\\sdk\\" : "src/sdk/",
+            "apie\\tencentMapApi\\lib\\" : "src/lib/"
         }
     },
     "autoload-dev": {
