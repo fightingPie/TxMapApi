@@ -12,20 +12,15 @@ use src\lib\HttpCurl;
 use Exception;
 
 
-class TxMapApi
+class TxMapApi extends MapConfig
 {
-
-    /**
-     * @var Config
-     */
-    private $configuration;
 
     /**
      * @param Config $config
      */
-    public function __construct(Config $config)
+    public function __construct($mapKey)
     {
-        $this->configuration = $config;
+        parent::__construct($mapKey);
     }
 
     /**
@@ -36,7 +31,7 @@ class TxMapApi
     private function mergeData($data)
     {
         $opt = [
-            'key' => $this->configuration->getApiKey(),
+            'key' => $this->getApiKey(),
         ];
         $opt = array_merge($opt, $data);
         return $opt;
@@ -51,7 +46,7 @@ class TxMapApi
     private function apiGet($url, $param)
     {
         $param = $this->mergeData($param);
-        $result = HttpCurl::get($this->configuration->getApi() . $url, $param, 30);
+        $result = HttpCurl::get($this->getApi() . $url, $param, 30);
         try {
             $res = json_decode($result, true);
         } catch (Exception $e) {
@@ -73,7 +68,7 @@ class TxMapApi
      */
     public function getPlaceByKeyword($param = [])
     {
-        $data = $this->apiGet($this->configuration->getApiKeyword(), $param);
+        $data = $this->apiGet($this->getApiKeyword(), $param);
         if ($data) {
             try {
                 if (!empty($data['data'])) {
@@ -98,7 +93,7 @@ class TxMapApi
      */
     public function getNearPlace($param = [])
     {
-        $data = self::apiGet($this->configuration->getApiGeocoder(), $param);
+        $data = self::apiGet($this->getApiGeocoder(), $param);
         if ($data) {
             try {
                 if (!empty($data['result']['poi_count'])) {
@@ -124,7 +119,7 @@ class TxMapApi
      */
     public function getLocation($param = [])
     {
-        $data = self::apiGet($this->configuration->getApiGeocoder(), $param);
+        $data = self::apiGet($this->getApiGeocoder(), $param);
         if ($data) {
             try {
                 if (!empty($data['result']['location'])) {
@@ -149,7 +144,7 @@ class TxMapApi
      */
     public function calcDistance($param = [], $flag = false)
     {
-        $res = self::apiGet($this->configuration->getApiDistance(), $param);
+        $res = self::apiGet($this->getApiDistance(), $param);
         if ($res) {
             return $res['result']['elements'];
         } else {
@@ -166,7 +161,7 @@ class TxMapApi
      */
     public function distanceMatrix($param = [], $flag = false)
     {
-        $res = self::apiGet($this->configuration->getApiDistance().'matrix', $param);
+        $res = self::apiGet($this->getApiDistance().'matrix', $param);
         if ($res) {
             return $res['result']['rows'];
         } else {
@@ -194,7 +189,7 @@ class TxMapApi
         }
         $modes = ['driving', 'walking', 'bicycling', 'transit'];
         if (in_array($param['mode'], $modes)) {
-            $apiurl = $this->configuration->getApiDirection() . $param['mode'] . '/';
+            $apiurl = $this->getApiDirection() . $param['mode'] . '/';
         } else {
             return false;
         }

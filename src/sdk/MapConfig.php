@@ -9,7 +9,7 @@
 namespace src\sdk;
 
 
-class Config
+class MapConfig
 {
     private $api_key;
     private $api = 'https://apis.map.qq.com/ws/';
@@ -22,7 +22,7 @@ class Config
      * Config constructor.
      * @param $api_key
      */
-    public function __construct($api_key)
+    protected function __construct($api_key)
     {
         $this->api_key = $api_key;
     }
@@ -30,7 +30,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApi()
+    protected function getApi()
     {
         return $this->api;
     }
@@ -38,7 +38,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApiKey()
+    protected function getApiKey()
     {
         return $this->api_key;
     }
@@ -46,7 +46,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApiGeocoder()
+    protected function getApiGeocoder()
     {
         return $this->api_api_geocoder;
     }
@@ -54,7 +54,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApiKeyword()
+    protected function getApiKeyword()
     {
         return $this->api_api_keyword;
     }
@@ -62,7 +62,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApiDistance()
+    protected function getApiDistance()
     {
         return $this->api_api_distance;
     }
@@ -70,7 +70,7 @@ class Config
     /**
      * @return mixed
      */
-    public function getApiDirection()
+    protected function getApiDirection()
     {
         return $this->api_api_direction;
     }

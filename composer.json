@@ -13,13 +13,13 @@
     "require": {},
     "autoload" :{
         "psr-4" : {
-            "src\\sdk\\" : "src/sdk",
-            "src\\lib\\" : "src/lib"
+            "a-pie\\tencent-map-api\\src\\sdk\\" : "src/sdk",
+            "a-pie\\tencent-map-api\\src\\lib\\" : "src/lib"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "test\\": "test"
+            "apie\\test\\": "test"
         }
     }
 }
